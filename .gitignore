@@ -156,3 +156,4 @@ fabric.properties
 /flask_app/logs/monolithic.db
 /*.patch
 /*.patch
+/consul/data/

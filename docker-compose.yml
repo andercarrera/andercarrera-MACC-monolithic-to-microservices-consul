@@ -3,25 +3,15 @@ services:
   consul:
     container_name: consul
     image: 'consul:latest'
+    environment:
+      CONSUL_LOCAL_CONFIG: '{"skip_leave_on_interrupt": true}'
+    command: consul agent -server -client=10.0.1.242 -bind=10.0.1.122 -bootstrap-expect=1 -data-dir=/consul/data
+    volumes:
+      - ./consul/data:/consul/data
+      - ./consul/consul.json:/consul/config/local.json
     expose:
       - '8300'
       - '8301'
       - '8500'
       - '8600'
-    ports:
-      - '8300:8300'
-      - '8301:8301'
-      - '8301:8301/udp'
-      - '8500:8500'
-      - '8600:8600'
-      - '8600:8600/udp'
-    networks:
-      lb7_network:
-        ipv4_address: '${CONSUL_IP}'
-networks:
-  lb7_network:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: '${NETWORK_SUBNET}'
+    network_mode: "host"
